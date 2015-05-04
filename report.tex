@@ -48,7 +48,7 @@ Infrastructure as a service (IaaS) is a popular cloud computing model where each
 
 \section{Introduction}
 \label{sec:intro}
-Cloud computing launches a new era of computer systems - new service models, such as Infrasturcture as a Service (IaaS), providing computing resources for customers to deploy their own applications. This brings new challenges to both ends of the cloud: for software applications, it is worth deliberating how to migrate multi-tier applications to provide scalable and reliable services\cite{zheng2014comma}; for operating systems hosting client applications, there is much room for optimizations to achieve smaller system size as well as better performance. Since IaaS providers often offer virtual machines rather than physical ones, quite a few features that a regular operation system provides become unnecessary or unimportant, which leaves us opportunities for optmizations.
+Cloud computing launches a new era of computer systems - new service models, such as Infrasturcture as a Service (IaaS), providing computing resources for customers to deploy their own applications. This brings new challenges to both ends of the cloud: for software applications, it is worth deliberating how to migrate multi-tier applications to provide scalable and reliable services \cite{zheng2014comma}; for operating systems hosting client applications, there is much room for optimizations to achieve smaller system size as well as better performance. Since IaaS providers often offer virtual machines rather than physical ones, quite a few features that a regular operation system provides become unnecessary or unimportant, which leaves us opportunities for optmizations.
 
 In modern data centers, a cloud infrasturcture usually consists of many physical host machines, each hosts a various number of guest virtual machines where user applications reside. Such infrastructure is widely adopted, because it helps cloud service providers make best use of their hardware resources, comparing to the alternative where a set of dedicated hardware is provided to each user. The use of virtual machines opens the door for guest OS optimization: (1) Hardware related features are hardly useful in the guest operating system, for it is only running on virtual machines - for instance, support for hot-pluggable device is never useful on a cloud virtual machine. (2) Cloud service providers would like to cut down the size of guest operating systems for storage efficiency. (3) Smaller-sized operating systems are easier to migrate to another physical machine, taking less time and bandwidth. (4) With refined analysis and careful investigation into the kernel modules, removing or modifying certain parts of the OS would not do harm to its performance.
 
@@ -60,11 +60,11 @@ In modern data centers, a cloud infrasturcture usually consists of many physical
 
 In this project, we try to minimize the Linux operating system to accommodate the requirements of a user machine in cloud. In particular, we aim at guest operating systems running in virtual machines, since most cloud service providers today would give their customers virtual machines that they have complete controls over. 
 
-Moreover, the guest operating system could be optimized to support the hosted applications in achieving better availability and performance. \cite{fox2009above} For most applications deployed on the cloud, one of the major issues that operations staff care about is the average downtime. In practise, application downtime is inevitable due to (1) preventive system maintainance, (2) application install or upgrade deployment, (3) application failures or outages. In each case, a large amount of time is spent on operating system booting up or rebooting. Therefore, it is important to shorten OS boot-up time to help improve application availability. There are some methods already discovered to speed up Linux booting - disabling unnecessary kernel modules, using a text-based login instead of a graphical login, etc. With a rapid-boot system, our cloud users are able to bring their applications back alive shortly after they experienced a program failure or finished new deployment.
+Moreover, the guest operating system could be optimized to support the hosted applications in achieving better availability and performance \cite{fox2009above}. For most applications deployed on the cloud, one of the major issues that operations staff care about is the average downtime. In practise, application downtime is inevitable due to (1) preventive system maintainance, (2) application install or upgrade deployment, (3) application failures or outages. In each case, a large amount of time is spent on operating system booting up or rebooting. Therefore, it is important to shorten OS boot-up time to help improve application availability. There are some methods already discovered to speed up Linux booting - disabling unnecessary kernel modules, using a text-based login instead of a graphical login, etc. With a rapid-boot system, our cloud users are able to bring their applications back alive shortly after they experienced a program failure or finished new deployment.
 
 In this project, we make an effort to speed things up during system boot time besides minimizing the size of a regular Linux system. Our goal is to tailor the Linux operating system to the needs of a guest OS running on virtual machines in the cloud, and to optimize the micro-OS for swift boot-up. We test our minimal OS for essential features that support common user applications in cloud, such as a simple web server, a scientific computing task, and basic communication services etc. \cite{iosup2011performance}
 
-The rest of this paper is structured as follows. Section \ref{sec:moti} captures the characteristics of a kernel running in a cloud, explaining why kernel minimization is feasible and plausible. Section \ref{sec:micro} analyzes how we managed to strip down the kernel and obtain MicroswiftOS. It covers several aspects from kernel configurations to boot script optimizations. The implementation details are in Section \ref{sec:impl}. And Section \ref{sec:eval} summerizes the evlauation of MicroswiftOS including system speed, system size and system completeness. Section \ref{sec:related} introduces several interesting papers related to our work. Finally Section \ref{sec:future} concludes our paper with some future work. We also include appendix section to elaborate on how we obtain the testing data, and justify the fairness and credibility of our evaluation.
+The rest of this paper is structured as follows. Section \ref{sec:moti} captures the characteristics of a kernel running in a cloud, explaining why kernel minimization is feasible and plausible. Section \ref{sec:micro} analyzes how we managed to strip down the kernel and obtain MicroswiftOS. It covers several aspects from kernel configurations to boot script optimizations. The implementation details are in Section \ref{sec:impl}. And Section \ref{sec:eval} summerizes the evlauation of MicroswiftOS including system speed, system size and system completeness. Section \ref{sec:related} introduces several interesting papers related to our work. Finally Section \ref{sec:future} concludes our paper with some future work. We also include appendices to summarize experiment results, provide detailed information on evaluation, elaborate on how we obtain the testing data, and justify the fairness and credibility of our evaluation.
 
 \section{Motivations}
 \label{sec:moti}
@@ -93,7 +93,7 @@ There are two major benefits of minimizing the size of the guest OS. Firstly, si
 
 Since most virtual machine will only run one specific task, rarely an application will need a wide collection of software, as provided by most Linux distributions. Even though, MicroswiftOS still provides a complete toolchain to users to build and install software, so that when a software in need is not included by default, the user will be able to add it to the system manually.
 
-\section{MicroswiftOS: Analysis and Methodologies}
+\section{Analysis and Methodologies}
 \label{sec:micro}
 
 MicroswiftOS is an operating system based on Linux and it is optimized for use in cloud computing. It is designed to run on virtual machines. It features fast boot-up and a relatively small image size.
@@ -224,7 +224,7 @@ Results are shown on Figure \ref{figure:eval}. From the results we know that bot
 The disk spaces occupied by all MicroswiftOS files were about $900$MB, compared to $1.2$GB of a newly installed Archlinux. Note that we also included debug symbols of the linux kernel and gcc so as to make diagnosis easier. If debug symbols were removed, the size would be further smaller.
 
 
-\section{Related Work}
+\section{Related Works}
 \label{sec:related}
 Kernel design for cloud computing is not a new yet very flourishing field. \cite{fox2009above} is a good introductionary survey to cloud computing and it listed 10 big problems in this field. Though many problems have been attempted, more problems are rising over the horizon in the past few years. Kernel minimization does not only draw constant attention from academia, industrial world and computer amateurs also get involved in various communities. Here we list some recent research and projects that inspires our work. 
 \subsection{Minimizing Kernel: Related Research}
@@ -354,7 +354,7 @@ Floating point tolerence has been set to $10^{-8}$.
 
 
 \section{Appendix C}
-This section includes two flame charts.
+This section includes two flame charts. (See next 2 pages)
 \begin{figure*}[!htb]
 \centering
 \includegraphics[width=5in]{0.png}
@@ -366,6 +366,49 @@ This section includes two flame charts.
 \includegraphics[width=5.5in]{1.png}
 \caption{\label{fig:flame1}Flame chart for optimized configuration}
 \end{figure*}
+
+\section{Appendix D}
+\begin{table}[!htb]
+\centering
+\caption{List of softwares installed on MicroswiftOS}
+\begin{tabular}{|c|c|c|}
+\hline
+Glibc-2.21  & Zlib-1.2.8 & Binutils-2.25 \\
+\hline
+ Man-DB-2.7.1 & GMP-6.0.0a  & MPFR-3.1.2 \\
+\hline
+MPC-1.0.2  & GCC-4.9.2  & Bzip2-1.0.6 \\
+\hline
+ Vim-7.4 & Pkg-config-0.28  & Acl-2.2.52 \\
+\hline
+Libcap-2.24 &  Sed-4.2.2 & Shadow-4.2.1 \\
+\hline
+Patch-2.7.4 & Psmisc-22.21 & Procps-ng-3.3.10 \\
+\hline
+E2fsprogs-1.42.12 & Coreutils-8.23 & Iana-Etc-2.30 \\
+\hline 
+Sysvinit-2.88dsf& M4-1.4.17 &  Flex-2.5.39 \\
+\hline
+Bison-3.0.4 &  Grep-2.21 & Readline-6.3 \\
+\hline
+Eudev-2.1.1 &  Bash-4.3.30 & Libtool-2.4.6 \\
+\hline
+GDBM-1.11 & Inetutils-1.9.2 &  Autoconf-2.69 \\
+\hline
+ Tar-1.28& Automake-1.15 & Diffutils-3.3 \\
+\hline
+Findutils-4.4.2 & Gettext-0.19.4 & Gperf-3.0.4 \\
+\hline
+Util-linux-2.26 & Xz-5.2.0 & GRUB-2.02~beta2 \\
+\hline
+Less-458 &  Gzip-1.6 & IPRoute2-3.19.0 \\
+\hline
+Sysklogd-1.5.1 & Make-4.1 &  \\
+\hline
+\end{tabular}
+\end{table}
+
+
 
 % \bibliographystyle{abbrv}
 \bibliographystyle{plain}
