@@ -1,40 +1,3 @@
-\PassOptionsToPackage{pdfpagelabels=false}{hyperref} 
-\setlength{\paperheight}{11in}
-\documentclass{acm_proc_article-sp}
-\usepackage{hyperref}
-\usepackage{multirow}
-\usepackage{enumerate}
-\pagenumbering{arabic}
-
-\begin{document}
-\title{MicroswiftOS : A Minimal OS for Cloud Computing}
-\permission{Permission to make digital or hard copies of all of part of this work for personal or classroom use is granted without fee provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page. Copyrights for components of this work owned by others than WISC must be honored. Abstracting with credit is permitted. To copy otherwise, or republish, to post on servers or to redistribute to lists, requires prior specific permission and/or a fee.\\
-CS 736, Feb-May, 2015, Madison, WI, USA.}
-\numberofauthors{4}
-\author{
-\alignauthor
-Menghui Wang\\
-   \affaddr{Department of Computer Sciences}\\
-   \email{menghui@cs.wisc.edu}
-% 2nd. author
-\alignauthor
-Yiran Wang\\
-   \affaddr{Department of Computer Sciences}\\
-   \email{yiran@cs.wisc.edu}
- % 3rd. author
- \and
-\alignauthor
-Chaowen Yu\\
-	\affaddr{Department of Computer Sciences}\\
-	\email{ycw@cs.wisc.edu}
-\alignauthor
-Junhan Zhu\\
-  \affaddr{Department of Electrical and Computer Engineering}\\
-  \email{jzhu84@wisc.edu}
-}
-\date{3 May 2014}
-
-\maketitle
 
 \begin{abstract}
 Infrastructure as a service (IaaS) is a popular cloud computing model where each customer will get access to a virtual machine running on the data center hosted by the service provider. Compared to traditional options, IaaS is a more reliable and economy solution when it comes to web hosting, cloud computing, data storage, or other workloads. Such cloud applications have different demands than a traditional program running on a personal computer - such as high availabilities, and ease to migration. MicroswiftOS, a specialized OS for cloud applications running in virtual machines, is built to best meet these requirements. It features a much faster boot-up time and a lightweight system size to enable high availability for applications and a more efficient storage for host machines. Experiments show our MicroswiftOS has met both goals.
@@ -172,7 +135,7 @@ Using the tools in the temporary system, we will compile and install every piece
 For a complete list of software installed on MicroswiftOS, check Appendix [].
 
 \subsection{Buliding the Kernel}
-The linux kernel is compiled using the configuration detected in the previous section. Besides, the ìVirtualizationî option must be selected.
+The linux kernel is compiled using the configuration detected in the previous section. Besides, the ‚ÄúVirtualization‚Äù option must be selected.
 
 \subsection{Changing Certain Configuration Files}
 \begin{enumerate}
@@ -207,9 +170,9 @@ We also benchmarked the performance of inter-process communication on Microswift
 
 \subsection{Boot-up Time}
 
-We measured the boot-up times of the system under $3$ different configurations: an original Archlinux as baseline, Archlinuxís kernel with the image of MicroswiftOS, and MicroswiftOSís kernel with MicroswiftOSís image.
-\footnote{Originally we also planned to measure the boot time of MicroswiftOSís kernel with Archlinuxís image, but it seems that the Archlinux image requires certain kernel configuration options to be selected when compiling the kernel, or otherwise it wonít boot.
-We wasnít able to figure it out at the end.}
+We measured the boot-up times of the system under $3$ different configurations: an original Archlinux as baseline, Archlinux‚Äôs kernel with the image of MicroswiftOS, and MicroswiftOS‚Äôs kernel with MicroswiftOS‚Äôs image.
+\footnote{Originally we also planned to measure the boot time of MicroswiftOS‚Äôs kernel with Archlinux‚Äôs image, but it seems that the Archlinux image requires certain kernel configuration options to be selected when compiling the kernel, or otherwise it won‚Äôt boot.
+We wasn‚Äôt able to figure it out at the end.}
 Boot-up times were measured using a stopwatch between the point when a GRUB menu item is selected and the appearance of the login prompt.
 
 Results are shown on Figure \ref{figure:eval}. From the results we know that both our kernel optimizations and image optimizations are effective, with image optimizations being more effective than kernel optimizations, and overall they cut down the boot-up time by half compared to the baseline system.
@@ -275,7 +238,7 @@ We would like to thank Michael Swift, Sanketh Nalli and Zhaoyu Luo for their hel
 
 \section{Appendix A}
 A summary of kernel configurations used in MicroswiftOS.
-\begin{enumerate}
+\begin{itemize}
 \item
 Kernel hacking
 	All supports in kernel hacking category could be disabled. Once our kernel is sucessfully set up for cloud computing, kernel hacking support could be minimized.
@@ -285,33 +248,33 @@ Library routines
 \item
 Cryptographic API
 	All cryptographic functions could be disabled except manadatory ones such as CSC32c and AES cipher algorithms. The following two are supported by default kernel but could also be eliminated.
-\begin{itemize}
+\begin{enumerate}
 \item
 Hardware crypto devices
 \item
 Pseudo Random Number Generation for Cryptographic modules
-\end{itemize}
+\end{enumerate}
 \item
 Security Options
 	Default security configurations include networking support and cryptographic API. We leave this unchanged as we need to preserve networking related services.
 \item
 File System
 	Our operating system uses ext4 file system we disabled support for following file systems.
-\begin{itemize}
+\begin{enumerate}
 \item
 Reiserfs support
 \item
 Miscellaneous filesystems
 \item
 Network file system
-\end{itemize}
+\end{enumerate}
 Along with disabled file systems we find two features that could also be disabled.
-\begin{itemize}
+\begin{enumerate}
 \item
 Native language support
 \item
 Dnotify support
-\end{itemize}
+\end{enumerate}
 Inotify support for userspace could not be removed from the kernel. Experiment shows that external storage devices could not be successfully unlicked and unmounted without inotify support.
 \item
 Networking support
@@ -325,7 +288,7 @@ Enable loadable module support
 \item
 General Setup
 	This section includes a lot of configurations which are not tested yet. We have identified the following features that could be removed.
-	\begin{itemize}
+	\begin{enumerate}
 	\item
 Automatically append version information to the version string
 \item
@@ -338,14 +301,14 @@ Automatically append version information to the version string
 \item Enable access to .config through /proc/config.gz
 \item Kernel .config support
 \item Control group support
-\end{itemize}
+\end{enumerate}
 We could disable following features but we recognize that disabling will not necessarily reduce the boot time, hence we leave them as default.
-\begin{itemize}
+\begin{enumerate}
 \item Disable heap randomization
 \item Namespace support
 \item BSD process accounting(in CPU/Task time and stats accounting)
-\end{itemize}
 \end{enumerate}
+\end{itemize}
 
 
 \section{Appendix B}
@@ -368,126 +331,3 @@ Floating point tolerence has been set to $10^{-8}$.
 % \bibliographystyle{abbrv}
 \bibliographystyle{plain}
 \bibliography{references}
-\end{document}
-
-% \begin{table}[!htb]
-% \centering
-% \begin{tabular}{|c||c|c|c|}
-% \hline
-% \multirow{3}{*}{\textbf{Benchmark}} & \textbf{Additional} & \textbf{Total} &\multirow{3}{*}{\textbf{Percentage}}\\ 
-% &\textbf{Memory} &\textbf{Memory}&\\
-% &\textbf{Accesses} &\textbf{Accesses} &\\ \hline \hline
-% aster & 175481 & 2404970 & 0.0730\\ \hline 
-% bzip2 & 1067380 & 9188892 & 0.1162\\ \hline 
-% lbm   & 130990 & 5003775 & 0.0262\\ \hline 
-% libquantum   & 54796 & 3092800 & 0.0177\\ \hline 
-% milc  & 136746 & 5575859 & 0.0245\\ \hline 
-% omnetpp  & 107165 & 287076 & 0.3733\\ \hline 
-% \textbf{Average} & \textbf{-} &\textbf{- } &\textbf{0.1051}\\ \hline
-% \end{tabular}
-% \caption{Additional memory accesses for storing reuse data in a 1MB L2 reuse cache during a simulation period of 300M instructions}
-% \label{table:additionalaccess}
-% \end{table}
-
-% \begin{figure}[!htb]
-% \centering
-% \epsfig{file=ReuseStruct.eps, height =2in, width =2in}
-% \caption{Structure of our implementation for the reuse cache}
-% \label{reuse:struct}
-% \end{figure}
-
-% \begin{table}[!htb]
-% \centering
-% \begin{tabular}{|c||c|c|c|}
-% \hline
-% \multirow{3}{*}{\textbf{benchmark}} & \textbf{memory} & \textbf{total} & \multirow{3}{*}{\textbf{percentage}}\\
-% &\textbf{write} &\textbf{memory} &\\
-% & \textbf{miss times} & \textbf{access times} & \\ \hline\hline
-% bzip2 & 778893 & 16791412 & 0.0464\\ \hline 
-% aster & 83555 & 4487131 & 0.0186\\ \hline 
-% libquantum & 35243 & 6091860 & 0.0058\\ \hline 
-% lbm & 72942 & 9862259 & 0.0074\\ \hline 
-% milc & 69407 & 10820712 & 0.0064\\ \hline 
-% omnetpp & 83508 & 416317 & 0.2006 \\ \hline
-
-% \textbf{Average} &\textbf{-} &\textbf{-} &\textbf{0.0475}\\
-
-% \hline
-% \end{tabular}
-% \caption{Memory write miss times in a 1MB reuse cache during a simulation period of 300M instructions}
-% \label{table:writemiss}
-% \end{table}
-
-
-
-% \begin{table}[!htb]
-% \centering
-% \begin{tabular}{|l||r|}
-% \hline
-% L1 data cache size & 64KB\\
-% \hline
-% L1 data cache associativity & 4-way\\
-% \hline
-% L1 instruction cache size & 32KB\\
-% \hline
-% L1 instruction cache associativity & 4-way\\
-% \hline
-% L2 cache size & 1MB\\
-% \hline
-% L2 cache associativity & 8-way\\
-% \hline
-% Cache line size & 64B\\
-% \hline
-% Single memory size & 512 MB\\
-% \hline
-% \end{tabular}
-% \caption{System configurations for baseline performance}
-% \label{table:baselineconfig}
-% \end{table}
-
-
-% \begin{figure*}[!htb]
-% \centering
-% \epsfig{file=rc248.eps, width=7in}
-% \caption{Relative performace of reuse cache under varying data array sizes. The data array sizes for ratio 2, 4, 8 are 512KB, 256KB, 128KB, respectively.}
-% \label{fig:rc248}
-% \end{figure*}
-
-
-
-% \begin{figure}[!htb]
-% \centering
-% \epsfig{file=bzip2live.eps, width=3.4in}
-% \caption{bzip2 percentage of live lines during execution of workload. Sampling is once per 100K data accesses.}
-% \label{fig:bzip2live}
-% \end{figure}
-
-% \begin{figure*}[!htb]
-% \centering
-% \epsfig{file=addarray.eps, width=7in}
-% \caption{Relative performace of reuse cache under varying additional block array sizes. The additional block array sizes for ratio 16, 32, 64 are 64KB, 32KB, 16KB, respectively. No additional block array means a regular reuse cache design. All statistics are obtained when reuse cache tag/data ratio is 2.}
-% \label{fig:addarray}
-% \end{figure*}
-
-
-% \begin{table*}[!htb]
-% \centering
-% \begin{tabular}{|c||c|c|c|c|c|c|}
-% \hline
-% \multirow{2}{*}{\textbf{Benchmark}} & 
-% \multicolumn{2}{c|}{\textbf{Ratio 2}} & \multicolumn{2}{c}{\textbf{Ratio 4}} & \multicolumn{2}{|c|}{\textbf{Ratio 8}}\\
-% \cline{2-7}
-% & \textbf{Speedup} & \textbf{Miss Rate} & \textbf{Speedup} & \textbf{Miss Rate} & \textbf{Speedup} & \textbf{Miss Rate} \\ \hline
-% astar & 0.983 & 1.046 & 0.984 & 1.042 & 0.972 & 1.069\\ \hline 
-% bwaves & 0.923 & 1.064 & 0.935 & 1.079 & 0.945 & 1.067\\ \hline 
-% bzip2 & 0.858 & 1.114 & 0.833 & 1.112 & 0.820 & 1.154\\ \hline 
-% lbm & 0.966 & 1.010 & 0.974 & 0.981 & 0.973 & 0.982\\ \hline 
-% libquantum & 0.957 & 1.015 & 0.964 & 1.020 & 0.979 & 1.045\\ \hline 
-% mcf & 0.876 & 1.700 & 0.833 & 2.030 & 0.796 & 2.383\\ \hline 
-% milc & 0.988 & 1.016 & 0.989 & 1.021 & 0.992 & 1.014\\ \hline 
-% omnetpp & 0.973 & 1.689 & 0.940 & 3.202 & 0.848 & 8.054\\ \hline 
-% \textbf{Average} & \textbf{0.939} &\textbf{1.070} &\textbf{0.930} & \textbf{1.091} &\textbf{0.913} &\textbf{1.148}\\ \hline
-% \end{tabular}
-% \caption{Speedup and miss rate of workloads relative to baseline. Ths miss rate is a relative ratio compared with baseline miss rate.}
-% \label{table:missrate}
-% \end{table*}
