@@ -35,7 +35,9 @@ Junhan Zhu\\
 \date{3 May 2014}
 
 \maketitle
-
+\begin{center}
+DRAFT
+\end{center}
 \begin{abstract}
 Infrastructure as a service (IaaS) is a popular cloud computing model where each customer will get access to a virtual machine running on the data center hosted by the service provider. Compared to traditional options, IaaS is a more reliable and economy solution when it comes to web hosting, cloud computing, data storage, or other workloads. Such cloud applications have different demands than a traditional program running on a personal computer - such as high availabilities, and ease to migration. MicroswiftOS, a specialized OS for cloud applications running in virtual machines, is built to best meet these requirements. It features a much faster boot-up time and a lightweight system size to enable high availability for applications and a more efficient storage for host machines. Experiments show our MicroswiftOS has met both goals.
 \end{abstract}
@@ -194,10 +196,8 @@ We also benchmarked the performance of inter-process communication on Microswift
 
 \subsection{Boot-up Time}
 
-We measured the boot-up times of the system under $3$ different configurations: an original Archlinux as baseline, Archlinux’s kernel with the image of MicroswiftOS, and MicroswiftOS’s kernel with MicroswiftOS’s image.
-\footnote{Originally we also planned to measure the boot time of MicroswiftOS’s kernel with Archlinux’s image, but it seems that the Archlinux image requires certain kernel configuration options to be selected when compiling the kernel, or otherwise it won’t boot.
-We was not able to figure it out at the end.}
-Boot-up times were measured using a stopwatch between the point when a GRUB menu item is selected and the appearance of the login prompt.
+We measured the boot-up times of the system under $3$ different configurations: an original Archlinux as baseline, Archlinux's kernel with the image of MicroswiftOS, and MicroswiftOS's kernel with MicroswiftOS's image. \footnote{Originally we also planned to measure the boot time of MicroswiftOS's kernel with Archlinux's image, but it seems that the Archlinux image requires certain kernel configuration options to be selected when compiling the kernel, or otherwise it won't boot.
+We was not able to figure it out at the end.} Boot-up times were measured using a stopwatch between the point when a GRUB menu item is selected and the appearance of the login prompt.
 
 Results are shown on Figure \ref{figure:eval}. From the results we know that both our kernel optimizations and image optimizations are effective, with image optimizations being more effective than kernel optimizations, and overall they cut down the boot-up time by half compared to the baseline system.
 

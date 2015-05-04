@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.4.6)  4 MAY 2015 00:49
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.4.6)  4 MAY 2015 00:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -390,10 +390,10 @@ File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 <graphs.pdf, id=133, 722.7pt x 406.51875pt>
 File: graphs.pdf Graphic file (type pdf)
  <use graphs.pdf>
-Package pdftex.def Info: graphs.pdf used on input line 57.
+Package pdftex.def Info: graphs.pdf used on input line 59.
 (pdftex.def)             Requested size: 245.71754pt x 138.21454pt.
 
-Overfull \hbox (5.71754pt too wide) in paragraph at lines 57--58
+Overfull \hbox (5.71754pt too wide) in paragraph at lines 59--60
  [][] 
  []
 
@@ -401,22 +401,33 @@ Overfull \hbox (5.71754pt too wide) in paragraph at lines 57--58
 
 
  <./graphs.pdf>]
-Overfull \hbox (6.65614pt too wide) in paragraph at lines 79--80
+Overfull \hbox (6.65614pt too wide) in paragraph at lines 81--82
 []\T1/aer/m/n/9 Thirdly, ap-pli-ca-tions on the cloud do not care about hardwar
 e-
  []
 
 [2]
-Overfull \hbox (11.46985pt too wide) in paragraph at lines 114--114
+Overfull \hbox (11.46985pt too wide) in paragraph at lines 116--116
 []\secfnt Optimizing Sys-tem Con-fig-u-ra-tions and Soft-
  []
 
-[3]
-Overfull \hbox (1.07011pt too wide) in paragraph at lines 171--173
-[]\T1/aer/m/n/9 Add "loglevel=4" to the ker-nel com-man-d-line ar-gu-ments
+[3] [4]
+Overfull \hbox (22.3093pt too wide) in paragraph at lines 199--201
+\T1/aer/m/n/9 linux's ker-nel with the im-age of Mi-croswiftOS, and Mi-croswift
+OS's
  []
 
-[4]
+
+Overfull \hbox (2.01486pt too wide) in paragraph at lines 199--201
+\T1/aer/m/n/9 mea-sured us-ing a stop-watch be-tween the point when a GRUB
+ []
+
+
+Overfull \hbox (3.17522pt too wide) in paragraph at lines 199--201
+\T1/aer/m/n/9 menu item is se-lected and the ap-pear-ance of the lo-gin prompt.
+ 
+ []
+
 Package epstopdf Info: Source file: <evaluation.eps>
 (epstopdf)                    date: 2015-05-03 16:34:33
 (epstopdf)                    size: 16728 bytes
@@ -427,7 +438,7 @@ Package epstopdf Info: Source file: <evaluation.eps>
 o.pdf evaluation.eps>
 (epstopdf)             \includegraphics on input line 206.
 Package epstopdf Info: Output file is already uptodate.
- <evaluation-eps-converted-to.pdf, id=212, 562.1pt x 421.575pt>
+<evaluation-eps-converted-to.pdf, id=212, 562.1pt x 421.575pt>
 File: evaluation-eps-converted-to.pdf Graphic file (type pdf)
 
 <use evaluation-eps-converted-to.pdf>
@@ -480,6 +491,11 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
  [6 <./latencies-eps-converted-to.pdf> <./throughput-eps-converted-to.pdf>]
 Overfull \hbox (2.77975pt too wide) in paragraph at lines 304--307
 []\T1/aer/m/n/9 Networking sup-port De-fault con-fig-u-ra-tions for net-work-
+ []
+
+
+Overfull \hbox (6.40585pt too wide) in paragraph at lines 307--310
+\T1/aer/m/n/9 still sup-ported by de-fault. Sound card sup-port is manda-
  []
 
 [7] <0.png, id=285, 963.6pt x 1697.542pt>
@@ -537,13 +553,13 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 416.
 Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 416.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 416.
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: EA9491F34BD000B0EFF9475B80465160;2119.
+(rerunfilecheck)             Checksum: 78D78074252B0BD9288AC486DB37020F;2119.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 416.
  ) 
 Here is how much of TeX's memory you used:
  6492 strings out of 493109
  91772 string characters out of 6135005
- 182728 words of memory out of 5000000
+ 182727 words of memory out of 5000000
  9759 multiletter control sequences out of 15000+600000
  51682 words of font info for 69 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -562,7 +578,7 @@ nts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/typ
 e1/urw/times/utmb8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/tim
 es/utmr8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/times/utmri8a
 .pfb>
-Output written on report.pdf (10 pages, 353945 bytes).
+Output written on report.pdf (10 pages, 353918 bytes).
 PDF statistics:
  373 PDF objects out of 1000 (max. 8388607)
  327 compressed objects within 4 object streams

@@ -170,9 +170,9 @@ We also benchmarked the performance of inter-process communication on Microswift
 
 \subsection{Boot-up Time}
 
-We measured the boot-up times of the system under $3$ different configurations: an original Archlinux as baseline, Archlinux’s kernel with the image of MicroswiftOS, and MicroswiftOS’s kernel with MicroswiftOS’s image.
-\footnote{Originally we also planned to measure the boot time of MicroswiftOS’s kernel with Archlinux’s image, but it seems that the Archlinux image requires certain kernel configuration options to be selected when compiling the kernel, or otherwise it won’t boot.
-We wasn’t able to figure it out at the end.}
+We measured the boot-up times of the system under $3$ different configurations: an original Archlinux as baseline, Archlinux's kernel with the image of MicroswiftOS, and MicroswiftOS's kernel with MicroswiftOS's image.
+\footnote{Originally we also planned to measure the boot time of MicroswiftOS's kernel with Archlinux's image, but it seems that the Archlinux image requires certain kernel configuration options to be selected when compiling the kernel, or otherwise it won't boot.
+We wasn't able to figure it out at the end.}
 Boot-up times were measured using a stopwatch between the point when a GRUB menu item is selected and the appearance of the login prompt.
 
 Results are shown on Figure \ref{figure:eval}. From the results we know that both our kernel optimizations and image optimizations are effective, with image optimizations being more effective than kernel optimizations, and overall they cut down the boot-up time by half compared to the baseline system.
