@@ -1,0 +1,115 @@
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{amsthm}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\newcommand{\newfontobj}[2]{
+  \newcommand{#1}[1]{
+    \expandafter\def\csname##1\endcsname{{#2 ##1}}}}
+
+\newfontobj{\class}{\rm} % Typeset Classes in roman font
+
+% Some standard classes (use in only mathmode)
+% Usage example: $\P \subseteq \NP$ and we believe that $\NP$ is not equal to $\P$.
+
+\class{PSPACE}
+\class{L}
+\class{BPL}
+\class{RL}
+\class{NC}
+\class{ZPL}
+\class{NPSPACE}
+\class{ASPACE}
+\class{NL}
+\class{EXP}
+\class{NEXP}
+\class{coNEXP}
+\class{NE}
+\class{E}
+\class{AM}
+\class{MA}
+\class{NP}
+\class{DNP}
+\class{UP}
+\class{P}
+\class{RP}
+\class{BPP}
+\class{ZPP}
+\class{EXPSPACE}
+\class{coNP}
+\class{coRP}
+\class{coAM}
+\class{PH}
+\class{IP}
+\class{PCP}
+\class{MIP}
+\class{SE}
+
+% operator classes.
+\class{BP}
+
+% these commands should be used in math mode - $ $
+\newcommand{\SHARPP}{{\#\rm{P}}}
+\newcommand{\PARITYP}{{\oplus\rm{P}}}
+
+% math operators...
+\DeclareMathOperator{\poly}{poly}
+\DeclareMathOperator{\Majority}{Majority}
+\DeclareMathOperator{\quasipoly}{quasi-poly}
+\DeclareMathOperator{\polylog}{poly-log}
+\DeclareMathOperator{\superpoly}{super-poly}
+\DeclareMathOperator{\DTISP}{DTISP}
+\DeclareMathOperator{\DSPACE}{DSPACE}
+\DeclareMathOperator{\DTIME}{DTIME}
+\DeclareMathOperator{\NSPACE}{NSPACE}
+\DeclareMathOperator{\NTIME}{NTIME}
+\DeclareMathOperator{\BPTIME}{BPTIME}
+\DeclareMathOperator{\RTIME}{RTIME}
+\DeclareMathOperator{\ZPTIME}{ZPTIME}
+\DeclareMathOperator{\BPSPACE}{BPSPACE}
+\DeclareMathOperator{\RSPACE}{RSPACE}
+\DeclareMathOperator{\ZPSPACE}{ZPSPACE}
+\DeclareMathOperator{\med}{med}
+
+
+% Complexity class
+\newcommand{\CC}{\mathcal{C}}
+
+
+% add DRAFT to your document %
+\newcommand{\draft}[0]{
+\begin{center}
+	{\bf \Large {\sc DRAFT} }
+\end{center}
+}
+
+% example environment
+\newenvironment{example}
+{\smallskip \noindent \emph{Example:}}
+{\hfill $\boxtimes$ \smallskip}
+
+% some theorem environments
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{claim}{Claim}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{definition}{Definition} % Use this for non-trivial
+	% definitions.
+
+% currently not used %
+\newtheorem{exercise}{Exercise}
+\newtheoremstyle{example}{\topsep}{\topsep}%
+     {\normalfont \small}   % Body font
+     {}    % Indent amount (empty = no indent, \parindent = para indent)
+     {\bfseries}     % Thm head font
+     {}%           Punctuation after thm head
+     {\topsep}%     Space after thm head
+     {}%         Thm head spec    \theoremstyle{example}
+\theoremstyle{example}
+%\newtheorem{example}{Example}
