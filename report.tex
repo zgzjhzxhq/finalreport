@@ -48,23 +48,23 @@ Infrastructure as a service (IaaS) is a popular cloud computing model where each
 
 \section{Introduction}
 \label{sec:intro}
-Cloud computing launches a new era of computer systems - new service models, such as Infrasturcture as a Service (IaaS), providing computing resources for customers to deploy their own applications. This brings new challenges to both ends of the cloud: for software applications, it is worth deliberating how to migrate multi-tier applications to provide scalable and reliable services \cite{zheng2014comma}; for operating systems hosting client applications, there is much room for optimizations to achieve smaller system size as well as better performance. Since IaaS providers often offer virtual machines rather than physical ones, quite a few features that a regular operation system provides become unnecessary or unimportant, which leaves us opportunities for optmizations.
+Cloud computing launches a new era of computer systems - new service models, such as Infrastructure as a Service (IaaS), providing computing resources for customers to deploy their own applications. This brings new challenges to both ends of the cloud: for software applications, it is worth deliberating how to migrate multi-tier applications to provide scalable and reliable services \cite{zheng2014comma}; for operating systems hosting client applications, there is much room for optimizations to achieve smaller system size as well as better performance. Since IaaS providers often offer virtual machines rather than physical ones, quite a few features that a regular operation system provides become unnecessary or unimportant, which leaves us opportunities for optimizations.
 
-In modern data centers, a cloud infrasturcture usually consists of many physical host machines, each hosts a various number of guest virtual machines where user applications reside. Such infrastructure is widely adopted, because it helps cloud service providers make best use of their hardware resources, comparing to the alternative where a set of dedicated hardware is provided to each user. The use of virtual machines opens the door for guest OS optimization: (1) Hardware related features are hardly useful in the guest operating system, for it is only running on virtual machines - for instance, support for hot-pluggable device is never useful on a cloud virtual machine. (2) Cloud service providers would like to cut down the size of guest operating systems for storage efficiency. (3) Smaller-sized operating systems are easier to migrate to another physical machine, taking less time and bandwidth. (4) With refined analysis and careful investigation into the kernel modules, removing or modifying certain parts of the OS would not do harm to its performance.
+In modern data centers, a cloud infrastructure usually consists of many physical host machines, each hosts a various number of guest virtual machines where user applications reside. Such infrastructure is widely adopted, because it helps cloud service providers make best use of their hardware resources, comparing to the alternative where a set of dedicated hardware is provided to each user. The use of virtual machines opens the door for guest OS optimization: (1) Hardware related features are hardly useful in the guest operating system, for it is only running on virtual machines - for instance, support for hot-pluggable device is never useful on a cloud virtual machine. (2) Cloud service providers would like to cut down the size of guest operating systems for storage efficiency. (3) Smaller-sized operating systems are easier to migrate to another physical machine, taking less time and bandwidth. (4) With refined analysis and careful investigation into the kernel modules, removing or modifying certain parts of the OS would not do harm to its performance.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=3.4in]{graphs.pdf}
-\caption{\label{fig:structure}Microswift OS structure}
+\caption{\label{fig:structure}MicroswiftOS structure}
 \end{figure}
 
 In this project, we try to minimize the Linux operating system to accommodate the requirements of a user machine in cloud. In particular, we aim at guest operating systems running in virtual machines, since most cloud service providers today would give their customers virtual machines that they have complete controls over. 
 
-Moreover, the guest operating system could be optimized to support the hosted applications in achieving better availability and performance \cite{fox2009above}. For most applications deployed on the cloud, one of the major issues that operations staff care about is the average downtime. In practise, application downtime is inevitable due to (1) preventive system maintainance, (2) application install or upgrade deployment, (3) application failures or outages. In each case, a large amount of time is spent on operating system booting up or rebooting. Therefore, it is important to shorten OS boot-up time to help improve application availability. There are some methods already discovered to speed up Linux booting - disabling unnecessary kernel modules, using a text-based login instead of a graphical login, etc. With a rapid-boot system, our cloud users are able to bring their applications back alive shortly after they experienced a program failure or finished new deployment.
+Moreover, the guest operating system could be optimized to support the hosted applications in achieving better availability and performance \cite{fox2009above}. For most applications deployed on the cloud, one of the major issues that operations staff care about is the average downtime. In practice, application downtime is inevitable due to (1) preventive system maintenance, (2) application install or upgrade deployment, (3) application failures or outages. In each case, a large amount of time is spent on operating system booting up or rebooting. Therefore, it is important to shorten OS boot-up time to help improve application availability. There are some methods already discovered to speed up Linux booting - disabling unnecessary kernel modules, using a text-based login instead of a graphical login, etc. With a rapid-boot system, our cloud users are able to bring their applications back alive shortly after they experienced a program failure or finished new deployment.
 
 In this project, we make an effort to speed things up during system boot time besides minimizing the size of a regular Linux system. Our goal is to tailor the Linux operating system to the needs of a guest OS running on virtual machines in the cloud, and to optimize the micro-OS for swift boot-up. We test our minimal OS for essential features that support common user applications in cloud, such as a simple web server, a scientific computing task, and basic communication services etc. \cite{iosup2011performance}
 
-The rest of this paper is structured as follows. Section \ref{sec:moti} captures the characteristics of a kernel running in a cloud, explaining why kernel minimization is feasible and plausible. Section \ref{sec:micro} analyzes how we managed to strip down the kernel and obtain MicroswiftOS. It covers several aspects from kernel configurations to boot script optimizations. The implementation details are in Section \ref{sec:impl}. And Section \ref{sec:eval} summerizes the evlauation of MicroswiftOS including system speed, system size and system completeness. Section \ref{sec:related} introduces several interesting papers related to our work. Finally Section \ref{sec:future} concludes our paper with some future work. We also include appendices to summarize experiment results, provide detailed information on evaluation, elaborate on how we obtain the testing data, and justify the fairness and credibility of our evaluation.
+The rest of this paper is structured as follows. Section \ref{sec:moti} captures the characteristics of a kernel running in a cloud, explaining why kernel minimization is feasible and plausible. Section \ref{sec:micro} analyzes how we managed to strip down the kernel and obtain MicroswiftOS. It covers several aspects from kernel configurations to boot script optimizations. The implementation details are in Section \ref{sec:impl}. And Section \ref{sec:eval} summarizes the evaluation of MicroswiftOS including system speed, system size and system completeness. Section \ref{sec:related} introduces several interesting papers related to our work. Finally Section \ref{sec:future} concludes our paper with some future work. We also include appendices to summarize experiment results, provide detailed information on evaluation, elaborate on how we obtain the testing data, and justify the fairness and credibility of our evaluation.
 
 \section{Motivations}
 \label{sec:moti}
@@ -72,19 +72,19 @@ The rest of this paper is structured as follows. Section \ref{sec:moti} captures
 Nowadays, an increasing number of companies and individuals choose to use infrastructure as a service (IaaS) platforms to host their applications, such as Amazon AWS, Microsoft Azure, and Google Cloud Platform to accomplish various tasks including web serving, scientific computations, data storage, application request handling, etc.
 IaaS customers usually have access to a virtual machine hosted on a physical machine owned by the service provider. Customers can choose their favorite operating system from a preset list, which usually includes some popular Linux distributions and Windows, and they will be able to get full privilege in the operating system they have chosen. Compared to using their own hardwares, IaaS provides customers with a more reliable, flexible, and cost-efficient solution.
 
-Workloads carried out on the cloud have their special characteristics that are different from ordinary workloads expected on a personal computer.One of major characteristics is that a virtual machine on the cloud is usually dedicated to one certain task, such as web serving. Various tasks are deployed on different virtual machines, providing seperation between applications. When one application encounters a fault, we can easily recover the error by restarting the application or the virtual machine without interfering other running applications.
+Workloads carried out on the cloud have their special characteristics that are different from ordinary workloads expected on a personal computer.One of major characteristics is that a virtual machine on the cloud is usually dedicated to one certain task, such as web serving. Various tasks are deployed on different virtual machines, providing separation between applications. When one application encounters a fault, we can easily recover the error by restarting the application or the virtual machine without interfering other running applications.
 
 Secondly, the availability of the applications matters. Customers who pay for public cloud service usually come to this decision as they care about the jobs running on the cloud, and would like to seek better support for high availability. Some user applications, such as the web server of a popular online shopping site, may cause huge profit loss if they are unavailable for a period of time. 
 
 Thirdly, applications on the cloud do not care about hardware-related features provided by the OS. Cloud service customers do not have physical access to the machine hosting their applications. Therefore certain operations would never take place in IaaS scenarios, such as installing new hardware, or inserting a USB flash key. In addition, as applications will always run on top of a virtual machine, the OS chosen by the customer does not have real control over the hardware of the host machine, but only sees virtualized hardware presented by the Virtual machine monitor.
 
-All of these bring up new opportunies for us to optimize the guest operating systems running in virtual machines to better serve the purposes of the workloads.
-We want to build a specialized operating system to use in cloud computing with shorter boot-up time and smaller size, and it still meets the requirements of applications runninng on top of it.
+All of these bring up new opportunities for us to optimize the guest operating systems running in virtual machines to better serve the purposes of the workloads.
+We want to build a specialized operating system to use in cloud computing with shorter boot-up time and smaller size, and it still meets the requirements of applications running on top of it.
 
 \subsection{Swift Boot-up}
 The availability of an application is calculated by
 $$\frac{MTTF}{MTTF+MTTR}$$
-where $MTTF$ is mean time to failure for the service and $MTTR$ is mean time to repair the failed service. When a failure occurs, usually the time spent on rebooting the system contributes a big portion of $MTTR$. This is especially true when certain monitoring services are deployed, in which they can monitor and detect failures, and in case a failure happens, it promtply reboots the failed machine. Therefore reducing the boot-up time of the OS can help increase the availability of applications running in the cloud.
+where $MTTF$ is mean time to failure for the service and $MTTR$ is mean time to repair the failed service. When a failure occurs, usually the time spent on rebooting the system contributes a big portion of $MTTR$. This is especially true when certain monitoring services are deployed, in which they can monitor and detect failures, and in case a failure happens, it promptly reboots the failed machine. Therefore reducing the boot-up time of the OS can help increase the availability of applications running in the cloud.
 
 There are a lot of opportunities for us to optimize the boot-up time. For instance, users and applications on the cloud are less interested in hardware-related functionalities, such as device management and disk utilities. Many modules and can be removed from the kernel, e.g., RAMDisk.
 
@@ -100,25 +100,25 @@ MicroswiftOS is an operating system based on Linux and it is optimized for use i
 
 \subsection{Optimizing Kernel Configurations}
 
-The OS kernel of MicroswiftOS is Linux 3.19, though various changes have been made to it in an effort to speed up booting and shrink kernel size. The kernel features a full-fledged configuration and many modules that could be conviently added on, but most of these features are not used in cloud computing at all. For exapmle, the guest operating system mainly focuses on computing and does not resort to all kinds of peripherals. Some related features such as all-inclusive file system support could be disabled. Some debugging features such as early printk could also be disabled as once our guest OS starts service we assume it does not suffer substantial debugging. Kernel modules could be completely removed because in a cloud computing environment most kinds of services are predefined and ad-hoc functionality changes should not occur. These features and functionalities can be configured before compiling the kernel thus we can prevent the corresponding code from being compiled in the first place.
-Our first attempt is to find a minimal set of features to be involved in the compiling phase that guarantees sucessful system start up and shut down. By manupulating these configurations, we find a list of features that could be disabled in addition to those already being disabled in default configuration, see Appendix A.
+The OS kernel of MicroswiftOS is Linux 3.19, though various changes have been made to it in an effort to speed up booting and shrink kernel size. The kernel features a full-fledged configuration and many modules that could be conveniently added on, but most of these features are not used in cloud computing at all. For example, the guest operating system mainly focuses on computing and does not resort to all kinds of peripherals. Some related features such as all-inclusive file system support could be disabled. Some debugging features such as early printk could also be disabled as once our guest OS starts service we assume it does not suffer substantial debugging. Kernel modules could be completely removed because in a cloud computing environment most kinds of services are predefined and ad-hoc functionality changes should not occur. These features and functionalities can be configured before compiling the kernel thus we can prevent the corresponding code from being compiled in the first place.
+Our first attempt is to find a minimal set of features to be involved in the compiling phase that guarantees successful system start up and shut down. By manipulating these configurations, we find a list of features that could be disabled in addition to those already being disabled in default configuration, see Appendix A.
 
-To understand the behavior of operating system bootup, we use perf - a commonly used statistical profiler in Linux - to collect sample data on the execution of a User-mode Linux (UML) and to conduct dynamic program analysis \cite{perf2013}. Since we mainly care about the activities happening at system booting, we use perf to profile a process that does the following tasks:
+To understand the behavior of operating system boot-up, we use perf - a commonly used statistical profiler in Linux - to collect sample data on the execution of a User-mode Linux (UML) and to conduct dynamic program analysis \cite{perf2013}. Since we mainly care about the activities happening at system booting, we use perf to profile a process that does the following tasks:
 \begin{enumerate}[(1)]
 \item Boot UML;
 \item Log in Linux;
 \item Halt
 \end{enumerate}
-We use FlameGraph to visualize the profilling reports - the x-axis spans the sample population, sorted alphabetically, and the y-axis shows stack depth. The function beneath a function is its parent, just like a stack traceback. The first graph is generated from the sample data collected by perf while we execute User-mode Linux with default configurations; and the second graph is generated from that of a minimized UML kernel. When we try to analyze the profiling data we have collected, we encountered a problem of missing symbols and we have not yet figured it out till now. Therefore some of the samples are only reported with their memory addresses instead of commands in the graphs above. But we can still gain some insights from their overall behaviors: for instance, with default configurations the Linux system spends a large amount of time working on something unsymbolized, as shown at the left most part of the graph; while the minimized UML kernel does not have a corresponding timespan. 
+We use FlameGraph to visualize the profiling reports - the x-axis spans the sample population, sorted alphabetically, and the y-axis shows stack depth. The function beneath a function is its parent, just like a stack traceback. The first graph is generated from the sample data collected by perf while we execute User-mode Linux with default configurations; and the second graph is generated from that of a minimized UML kernel. When we try to analyze the profiling data we have collected, we encountered a problem of missing symbols and we have not yet figured it out till now. Therefore some of the samples are only reported with their memory addresses instead of commands in the graphs above. But we can still gain some insights from their overall behaviors: for instance, with default configurations the Linux system spends a large amount of time working on something unsymbolized, as shown at the left most part of the graph; while the minimized UML kernel does not have a corresponding timespan. 
 
 \subsection{Optimizing System Configurations and Software Environments}
 
 Apart from the kernel, an operating system will also need a software environment to run. Pre-installed softwares and configurations will serve for a number of important purposes: 
 \begin{enumerate}
 \item
-Providing a file system on a partitioned disk that the OS will mount as root. The file system will need to comform to the Filesystem Hierachy Standard of Linux, which requires it to have a variuos number of pre-created folders such as /bin, /lib, etc.
+Providing a file system on a partitioned disk that the OS will mount as root. The file system will need to conform to the Filesystem Hierarchy Standard of Linux, which requires it to have a various number of pre-created folders such as /bin, /lib, etc.
 \item
-Bootstraping the OS. This includes boot-loading the kernel, instructing the kernel on how to mount the root file system and what kernel modules to load and where they are located, and providing an init program that the kernel will run after booting has completed.
+Bootstrapping the OS. This includes boot-loading the kernel, instructing the kernel on how to mount the root file system and what kernel modules to load and where they are located, and providing an init program that the kernel will run after booting has completed.
 \item
 Providing a shell program in which user can enter commands and read outputs.
 \item
@@ -128,20 +128,20 @@ Providing handy tools utilities that users can use to execute common tasks and b
 Most popular Linux distributions have configured their system to best meet the needs of an ordinary PC user. On the contrary, we configured MicroswiftOS to best meet the requirements of cloud-hosted applications. 
 
 \subsubsection{Optimize Boot Scripts}
-After the kernel boots up, a startup script starts to run to do initialization work, such as setting run levels, mounting file systems, and initializing kernel modules, etc. We can modify some parts in this scripts to speed up the booting process. For example, we can disable the module used for supporting hot-pluggable devices because users will not have physical contacts with the host machine. As a second example, at a certain step the script will wait for udev (a device manager for Linux kernel) initializations to complete before executing the next steps. This is necessary when subsequent initialization steps will use udev; however this is not the case for MicroswfitOS, so we can make subsequent steps to start as soon as possible.
+After the kernel boots up, a startup script starts to run to do initialization work, such as setting run levels, mounting file systems, and initializing kernel modules, etc. We can modify some parts in this scripts to speed up the booting process. For example, we can disable the module used for supporting hot-pluggable devices because users will not have physical contacts with the host machine. As a second example, at a certain step the script will wait for udev (a device manager for Linux kernel) initializations to complete before executing the next steps. This is necessary when subsequent initialization steps will use udev; however this is not the case for MicroswiftOS, so we can make subsequent steps to start as soon as possible.
 
 \subsubsection{Disable initramfs}
 initramfs was a mechanism introduced to simplify the booting process. During booting a lot of components such as file systems, disks, device drivers, need to be initialized.
-However the resouces and configurations that are needed to initialize these components are stored in the file system on disk, therefore it brings the problem of egg and chicken. initramfs is a compressed file system image that includes all essential files needed to initialize the system. If initramfs is enabled, the boot loader will first loaded it directly into the memory, and that the kernel can boot with all essential tools ready. Initramfs simplifies the booting process a lot when the file system or device layout is rather complicated.
+However the resources and configurations that are needed to initialize these components are stored in the file system on disk, therefore it brings the problem of egg and chicken. initramfs is a compressed file system image that includes all essential files needed to initialize the system. If initramfs is enabled, the boot loader will first loaded it directly into the memory, and that the kernel can boot with all essential tools ready. Initramfs simplifies the booting process a lot when the file system or device layout is rather complicated.
 
 We decide to disable initramfs because loading the ramfs into memory takes too much time. Besides, initramfs provides no actual benefit for cloud computing. This is because the disk layout is usually simple for virtual machines, and users are not expected to change any device related configures.
 
 \subsubsection{Disable fsck On Boot}
 
-Under default settings each partition will need to be checked using fsck before mounted at boot. This is mainly to detect disk corruptions. Since MicroSwiftOS is designed to run in a virtual machine, the disks it sees are actually files residing in the host OS. As a result, fsck would not be necessary because the host file system will be responsible for intergrity checks and providing correct files.
+Under default settings each partition will need to be checked using fsck before mounted at boot. This is mainly to detect disk corruptions. Since MicroSwiftOS is designed to run in a virtual machine, the disks it sees are actually files residing in the host OS. As a result, fsck would not be necessary because the host file system will be responsible for integrity checks and providing correct files.
 
 \subsubsection{A Minimal Software Collection and a Complete Toolchain}
-MicroSwiftOS includes everything needed to build a software: a compiler, a linker, a library loader, a text editor, bash utilities, common libraries, debugging tools, manuals and documents. On the other hand, it does not include more software than that. User will need to build and install any softwares that they need to run their application. This will not be a big hassle, because cloud virtual machines will usually be dedicted to only one task, and as a result the virtual machines will only need to be configured once.
+MicroswiftOS includes everything needed to build a software: a compiler, a linker, a library loader, a text editor, bash utilities, common libraries, debugging tools, manuals and documents. On the other hand, it does not include more software than that. User will need to build and install any softwares that they need to run their application. This will not be a big hassle, because cloud virtual machines will usually be dedicated to only one task, and as a result the virtual machines will only need to be configured once.
 
 \section{Implementation}
 \label{sec:impl}
@@ -158,7 +158,7 @@ The reason we cannot use tools in the current system is to make sure nothing wil
 Using the tools in the temporary system, we will compile and install every piece of software we need.
 For a complete list of software installed on MicroswiftOS, check Appendix [].
 
-\subsection{Buliding the Kernel}
+\subsection{Building the Kernel}
 The linux kernel is compiled using the configuration detected in the previous section. Besides, the “Virtualization” option must be selected.
 
 \subsection{Changing Certain Configuration Files}
@@ -168,7 +168,7 @@ Change the grub configuration file properly so that grub will boot MicroswiftOS.
 \item
 Get rid of the "initrd" line in the grub configuration file to disable ramdisk.
 \item
-Add "loglevel=4" to the kernel commandline arguments so as to decrease the number of messages being logged. This would also slightly speed up the booting process \cite{bird2004methods}.
+Add "loglevel=4" to the kernel command-line arguments so as to decrease the number of messages being logged. This would also slightly speed up the booting process \cite{bird2004methods}.
 \item
 Change /etc/fstab to disable fsck for the root partition.
 \item
@@ -196,7 +196,7 @@ We also benchmarked the performance of inter-process communication on Microswift
 
 We measured the boot-up times of the system under $3$ different configurations: an original Archlinux as baseline, Archlinux’s kernel with the image of MicroswiftOS, and MicroswiftOS’s kernel with MicroswiftOS’s image.
 \footnote{Originally we also planned to measure the boot time of MicroswiftOS’s kernel with Archlinux’s image, but it seems that the Archlinux image requires certain kernel configuration options to be selected when compiling the kernel, or otherwise it won’t boot.
-We wasn’t able to figure it out at the end.}
+We was not able to figure it out at the end.}
 Boot-up times were measured using a stopwatch between the point when a GRUB menu item is selected and the appearance of the login prompt.
 
 Results are shown on Figure \ref{figure:eval}. From the results we know that both our kernel optimizations and image optimizations are effective, with image optimizations being more effective than kernel optimizations, and overall they cut down the boot-up time by half compared to the baseline system.
@@ -226,15 +226,15 @@ The disk spaces occupied by all MicroswiftOS files were about $900$MB, compared 
 
 \section{Related Works}
 \label{sec:related}
-Kernel design for cloud computing is not a new yet very flourishing field. \cite{fox2009above} is a good introductionary survey to cloud computing and it listed 10 big problems in this field. Though many problems have been attempted, more problems are rising over the horizon in the past few years. Kernel minimization does not only draw constant attention from academia, industrial world and computer amateurs also get involved in various communities. Here we list some recent research and projects that inspires our work. 
+Kernel design for cloud computing is not a new yet very flourishing field. \cite{fox2009above} is a good introductory survey to cloud computing and it listed 10 big problems in this field. Though many problems have been attempted, more problems are rising over the horizon in the past few years. Kernel minimization does not only draw constant attention from academia, industrial world and computer amateurs also get involved in various communities. Here we list some recent research and projects that inspires our work. 
 \subsection{Minimizing Kernel: Related Research}
 
-The Nonkernel, introduced in \cite{ben2013nonkernel}, is a kernel design in which hardware resources are exposed to applications directly to reduce kernel booting time and to boost up parallelism and thus throughput. The nonkernel does three things: 1) machine booting, 2) resource acquisition, and 3) application isolation. Machine booting is an intrinsic requirement of the kernel, and thus should be preserved. Resource acquisition is the management of hardware resources. Specifically, in a cloud computing environment, such mechanism must be provided and the kernel is in charge of resource arbitration. Finally application isolation is to guarantee that no applications should interfere with each other when accessing the same hardware resources. The nonkernel provides an IPC mechanism that does not involve kernel. It is worth noting that traditional work such as processing scheduling and memory management are no longer the focus of a kernel design in a cloud computing. Nonkernel provides us with reference of cutting down a full-size kernel, yet there is no actual implementation. One major difference is that nonkernel serves as a "supervisor" in cloud computing, while our project aims to build a guest operating system.
+The Nonkernel, introduced in \cite{ben2013nonkernel}, is a kernel design in which hardware resources are exposed to applications directly to reduce kernel booting time and to boost up parallelism and thus throughput. The Nonkernel does three things: 1) machine booting, 2) resource acquisition, and 3) application isolation. Machine booting is an intrinsic requirement of the kernel, and thus should be preserved. Resource acquisition is the management of hardware resources. Specifically, in a cloud computing environment, such mechanism must be provided and the kernel is in charge of resource arbitration. Finally application isolation is to guarantee that no applications should interfere with each other when accessing the same hardware resources. The Nonkernel provides an IPC mechanism that does not involve kernel. It is worth noting that traditional work such as processing scheduling and memory management are no longer the focus of a kernel design in a cloud computing. Nonkernel provides us with reference of cutting down a full-size kernel, yet there is no actual implementation. One major difference is that nonkernel serves as a "supervisor" in cloud computing, while our project aims to build a guest operating system.
 
 Libra \cite{ammons2007libra} is the first operating system that specifically designed for JVM. It borrows the approach similar to exokernel, but avoids the problem of exokernel and reduces the cost of both developing a libOS and administering new partitions. With the use of a hypervisor, applications can use privileged execution modes and instructions, which enables optimizations and eases migration. In our projects we adopted the understanding an OS kernel as many functional parts, and may refer to the approach in this paper.
 
 \subsection{Linux Kernel : Methodology, Tools and Tips from Industry}
-Industrial world and computer amatuers share valuable expereinces on that exploration to reduce boot time. The fastest boot time ever seen is within five seconds \cite{LPC} measured by Bootchart\cite{Bootchart} - Arjan van de Ven managed to boost Fedora 9 on an Asus EEE PC in five seconds, almost 90\% reduction in booting time compared to 45 seconds baseline. We find their approach inspiring for our project. Bootchart might be a useful tool for our project, though the last update was back in 2005.
+Industrial world and computer amateurs share valuable experiences on that exploration to reduce boot time. The fastest boot time ever seen is within five seconds \cite{LPC} measured by Bootchart\cite{Bootchart} - Arjan van de Ven managed to boost Fedora 9 on an Asus EEE PC in five seconds, almost 90\% reduction in booting time compared to 45 seconds baseline. We find their approach inspiring for our project. Bootchart might be a useful tool for our project, though the last update was back in 2005.
 Kernel booting consists of three phases: first Readahead module would read blocks of necessary modules from disk so that are cached in the memory, which will reduce cache miss and page fault during booting. Second, it goes along the critical path from filesystem checking to desktop displaying. Third step is hardware abstraction using HAL. These three phases start in sequential order but are running concurrently, and special arrangement has set up to achieve efficient CPU and disk utilization.
 
 To extract basic components in an operating system and get rid of unnecessary ones is no easy task. It usually follows "trial and error" methodology that requires lots of labor and time. In \cite{gong2010characteristics}, basic OS requirements are defined and elaborated in a cloud computing context. For our project, we used this paper as a reference to set up the minimal feature set for our kernel design.
@@ -253,7 +253,7 @@ Using objdump, nm and readelf to list symbols in an object file.
 \item
 Using gprof for sampling.
 \end{enumerate}
-For future research, we plan to try using gdb to set breakpoints to find out the commands corresponding to the memory addresses, and recover the missing symbols in the two Flamegraphs. From here we expect to gain more in depth understanding of the events and functions called during OS boot-up. Then we are able to find out the functions that take large portion of the booting time, look into the their implementations and examine optimization possibilities.
+For future research, we plan to try using gdb to set breakpoints to find out the commands corresponding to the memory addresses, and recover the missing symbols in the two flame graphs. From here we expect to gain more in depth understanding of the events and functions called during OS boot-up. Then we are able to find out the functions that take large portion of the booting time, look into the their implementations and examine optimization possibilities.
 
 
 \section{Acknowledgement}
@@ -265,13 +265,13 @@ A summary of kernel configurations used in MicroswiftOS.
 \begin{enumerate}
 \item
 Kernel hacking
-	All supports in kernel hacking category could be disabled. Once our kernel is sucessfully set up for cloud computing, kernel hacking support could be minimized.
+	All supports in kernel hacking category could be disabled. Once our kernel is successfully set up for cloud computing, kernel hacking support could be minimized.
 \item
 Library routines
-	All functions and algorithms can be disabled except manadatory ones such as CRC 16 funtions, and CRC32/CRC32c functions.
+	All functions and algorithms can be disabled except mandatory ones such as CRC 16 functions, and CRC32/CRC32c functions.
 \item
 Cryptographic API
-	All cryptographic functions could be disabled except manadatory ones such as CSC32c and AES cipher algorithms. The following two are supported by default kernel but could also be eliminated.
+	All cryptographic functions could be disabled except mandatory ones such as CSC32c and AES cipher algorithms. The following two are supported by default kernel but could also be eliminated.
 \begin{itemize}
 \item
 Hardware crypto devices
@@ -302,13 +302,13 @@ Dnotify support
 Inotify support for userspace could not be removed from the kernel. Experiment shows that external storage devices could not be successfully unlicked and unmounted without inotify support.
 \item
 Networking support
-	Default configurations for networking services include sockets, TCP/IP potocol stack. We leave this portion unchanged.
+	Default configurations for networking services include sockets, TCP/IP protocol stack. We leave this portion unchanged.
 \item
 Device Drivers
-	Block devices and network devices are still supported by default. Sound card support is manatory. IOMMU hardware support could be disabled. Everything else is disabled by default.
+	Block devices and network devices are still supported by default. Sound card support is mandatory. IOMMU hardware support could be disabled. Everything else is disabled by default.
 \item
 Enable loadable module support
-	This catogory of functionalities can be removed from the kernel. Loadable modules significantly reduce system speed and is not suitable for cloud use.
+	This category of functionalities can be removed from the kernel. Loadable modules significantly reduce system speed and is not suitable for cloud use.
 \item
 General Setup
 	This section includes a lot of configurations which are not tested yet. We have identified the following features that could be removed.
@@ -345,12 +345,12 @@ We generated $10$ such random networks to test the correctness of the maxflow al
 
 To test the Gaussian-Jordan elimination algorithm, we generated a $100$-by-$100$ random matrix and a $100$-dimensional random vector.
 Each entry of the matrix and the vector is chosen uniformly at random from real numbers in $[0,1]$.
-Floating point tolerence has been set to $10^{-8}$, which means two matrices are considered equal if their dimensions match and the absolute difference between each corresponding entry is less than $10^{-8}$.
+Floating point tolerance has been set to $10^{-8}$, which means two matrices are considered equal if their dimensions match and the absolute difference between each corresponding entry is less than $10^{-8}$.
 
 The simplex solver will try to optimize the following problem: maximize $c^T x$ subject to $Ax \leq b$ and $x \geq 0$, where $A$, $b$, $c$ are matrices and vectors of correct dimensions, and $x$ is the solution.
 To test the correctness of the simplex algorithm, we pick the dimensions of the matrices as follows: $A$ $50$-by-$30$, $b$ $50$-by-$1$, $c$ $30$-by-$1$.
 All entries in $A$, $b$, $c$ are chosen uniformly at random from real numbers in $[0,1]$.
-Floating point tolerence has been set to $10^{-8}$.
+Floating point tolerance has been set to $10^{-8}$.
 
 
 \section{Appendix C}
