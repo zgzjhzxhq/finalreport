@@ -64,7 +64,7 @@ Moreover, the guest operating system could be optimized to support the hosted ap
 
 In this project, we make an effort to speed things up during system boot time besides minimizing the size of a regular Linux system. Our goal is to tailor the Linux operating system to the needs of a guest OS running on virtual machines in the cloud, and to optimize the micro-OS for swift boot-up. We test our minimal OS for essential features that support common user applications in cloud, such as a simple web server, a scientific computing task, and basic communication services etc. \cite{iosup2011performance}
 
-The rest of this paper is structured as follows. Section 2 captures the characteristics of a kernel running in a cloud, explaining why kernel minimization is feasible and plausible. Section 3 analyzes how we managed to strip down the kernel and obtain MicroswiftOS. It covers several aspects from kernel configurations to boot script optimizations. The implementation details are in Section 4. And Section 5 summerizes the evlauation of MicroswiftOS including system speed, system size and system completeness. Section 6 introduces several interesting papers related to our work. Finally Section 7 concludes our paper. We also include appendix section to elaborate on how we obtain the testing data, and justify the fairness and credibility of our evaluation.
+The rest of this paper is structured as follows. Section \ref{sec:moti} captures the characteristics of a kernel running in a cloud, explaining why kernel minimization is feasible and plausible. Section \ref{sec:micro} analyzes how we managed to strip down the kernel and obtain MicroswiftOS. It covers several aspects from kernel configurations to boot script optimizations. The implementation details are in Section \ref{sec:impl}. And Section \ref{sec:eval} summerizes the evlauation of MicroswiftOS including system speed, system size and system completeness. Section \ref{sec:related} introduces several interesting papers related to our work. Finally Section \ref{sec:future} concludes our paper with some future work. We also include appendix section to elaborate on how we obtain the testing data, and justify the fairness and credibility of our evaluation.
 
 \section{Motivations}
 \label{sec:moti}
@@ -103,26 +103,12 @@ MicroswiftOS is an operating system based on Linux and it is optimized for use i
 The OS kernel of MicroswiftOS is Linux 3.19, though various changes have been made to it in an effort to speed up booting and shrink kernel size. The kernel features a full-fledged configuration and many modules that could be conviently added on, but most of these features are not used in cloud computing at all. For exapmle, the guest operating system mainly focuses on computing and does not resort to all kinds of peripherals. Some related features such as all-inclusive file system support could be disabled. Some debugging features such as early printk could also be disabled as once our guest OS starts service we assume it does not suffer substantial debugging. Kernel modules could be completely removed because in a cloud computing environment most kinds of services are predefined and ad-hoc functionality changes should not occur. These features and functionalities can be configured before compiling the kernel thus we can prevent the corresponding code from being compiled in the first place.
 Our first attempt is to find a minimal set of features to be involved in the compiling phase that guarantees sucessful system start up and shut down. By manupulating these configurations, we find a list of features that could be disabled in addition to those already being disabled in default configuration, see Appendix A.
 
-To understand the behavior of operating system bootup, we use perf - a commonly used statistical profiler in Linux - to collect sample data on the execution of a User-mode Linux (UML) and to conduct dynamic program analysis[3]. Since we mainly care about the activities happening at system booting, we use perf to profile a process that does the following tasks:
-
-\begin{itemize}
+To understand the behavior of operating system bootup, we use perf - a commonly used statistical profiler in Linux - to collect sample data on the execution of a User-mode Linux (UML) and to conduct dynamic program analysis \cite{perf2013}. Since we mainly care about the activities happening at system booting, we use perf to profile a process that does the following tasks:
+\begin{enumerate}[(1)]
 \item Boot UML;
 \item Log in Linux;
 \item Halt
-\end{itemize}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=3.4in]{0.png}
-\caption{\label{fig:flame0}Flame chart for default configuration}
-\end{figure}
-
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=3.4in]{1.png}
-\caption{\label{fig:flame1}Flame chart for optimized configuration}
-\end{figure}
-
+\end{enumerate}
 We use FlameGraph to visualize the profilling reports - the x-axis spans the sample population, sorted alphabetically, and the y-axis shows stack depth. The function beneath a function is its parent, just like a stack traceback. The first graph is generated from the sample data collected by perf while we execute User-mode Linux with default configurations; and the second graph is generated from that of a minimized UML kernel. When we try to analyze the profiling data we have collected, we encountered a problem of missing symbols and we have not yet figured it out till now. Therefore some of the samples are only reported with their memory addresses instead of commands in the graphs above. But we can still gain some insights from their overall behaviors: for instance, with default configurations the Linux system spends a large amount of time working on something unsymbolized, as shown at the left most part of the graph; while the minimized UML kernel does not have a corresponding timespan. 
 
 \subsection{Optimizing System Configurations and Software Environments}
@@ -158,6 +144,7 @@ Under default settings each partition will need to be checked using fsck before 
 MicroSwiftOS includes everything needed to build a software: a compiler, a linker, a library loader, a text editor, bash utilities, common libraries, debugging tools, manuals and documents. On the other hand, it does not include more software than that. User will need to build and install any softwares that they need to run their application. This will not be a big hassle, because cloud virtual machines will usually be dedicted to only one task, and as a result the virtual machines will only need to be configured once.
 
 \section{Implementation}
+\label{sec:impl}
 
 We constructed MicroswiftOS from scratch. The general procedures were similar to what was listed on Linux from Scratch \cite{beekmans1999linux}, except that a few packages were removed and certain configurations were changed. We choose not to describe every detail as it was a tedious procedure and the exact details can be found online. Instead, we will only highlight general ideas and things we have changed.
 
