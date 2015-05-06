@@ -1,0 +1,77 @@
+\begin{thebibliography}{10}
+
+\bibitem{Bootchart}
+Bootchart.
+\newblock http://www.bootchart.org.
+
+\bibitem{LPC}
+Lpc: booting linux in five seconds.
+\newblock http://lwn.net/Articles/299483/.
+
+\bibitem{mini}
+Cs 736 advance operating systems - spring 2015 | main/mini-project, May 2015.
+
+\bibitem{perf2013}
+Perf for user space program analysis, May 2015.
+
+\bibitem{ammons2007libra}
+Glenn Ammons, Jonathan Appavoo, Maria Butrico, Dilma Da~Silva, David Grove,
+  Kiyokuni Kawachiya, Orran Krieger, Bryan Rosenburg, Eric Van~Hensbergen, and
+  Robert~W Wisniewski.
+\newblock Libra: a library operating system for a jvm in a virtualized
+  execution environment.
+\newblock In {\em Proceedings of the 3rd international conference on Virtual
+  execution environments}, pages 44--54. ACM, 2007.
+
+\bibitem{beekmans1999linux}
+Gerard Beekmans.
+\newblock Linux from scratch.
+\newblock 1999.
+
+\bibitem{ben2013nonkernel}
+Muli Ben-Yehuda, Omer Peleg, Orna Agmon Ben-Yehuda, Igor Smolyar, and Dan
+  Tsafrir.
+\newblock The nonkernel: a kernel designed for the cloud.
+\newblock In {\em Proceedings of the 4th Asia-Pacific Workshop on Systems},
+  page~4. ACM, 2013.
+
+\bibitem{bird2004methods}
+Tim~R Bird.
+\newblock Methods to improve bootup time in linux.
+\newblock In {\em Linux Symposium}, volume~1, pages 79--88, 2004.
+
+\bibitem{fox2009above}
+Armando Fox, Rean Griffith, A~Joseph, R~Katz, Andrew Konwinski, Gunho Lee,
+  D~Patterson, Ariel Rabkin, and Ion Stoica.
+\newblock Above the clouds: A berkeley view of cloud computing.
+\newblock {\em Dept. Electrical Eng. and Comput. Sciences, University of
+  California, Berkeley, Rep. UCB/EECS}, 28:13, 2009.
+
+\bibitem{gong2010characteristics}
+Chunye Gong, Jie Liu, Qiang Zhang, Haitao Chen, and Zhenghu Gong.
+\newblock The characteristics of cloud computing.
+\newblock In {\em Parallel Processing Workshops (ICPPW), 2010 39th
+  International Conference on}, pages 275--279. IEEE, 2010.
+
+\bibitem{iosup2011performance}
+Alexandru Iosup, Simon Ostermann, M~Nezih Yigitbasi, Radu Prodan, Thomas
+  Fahringer, and Dick~HJ Epema.
+\newblock Performance analysis of cloud computing services for many-tasks
+  scientific computing.
+\newblock {\em Parallel and Distributed Systems, IEEE Transactions on},
+  22(6):931--945, 2011.
+
+\bibitem{madhavapeddy2010turning}
+Anil Madhavapeddy, Richard Mortier, Ripduman Sohan, Thomas Gazagnaire, Steven
+  Hand, Tim Deegan, Derek McAuley, and Jon Crowcroft.
+\newblock Turning down the lamp: software specialisation for the cloud.
+\newblock In {\em Proceedings of the 2nd USENIX conference on Hot topics in
+  cloud computing, HotCloud}, volume~10, pages 11--11, 2010.
+
+\bibitem{zheng2014comma}
+Jie Zheng, Tze Sing~Eugene Ng, Kunwadee Sripanidkulchai, and Zhaolei Liu.
+\newblock Comma: coordinating the migration of multi-tier applications.
+\newblock In {\em Proceedings of the 10th ACM SIGPLAN/SIGOPS international
+  conference on Virtual execution environments}, pages 153--164. ACM, 2014.
+
+\end{thebibliography}
